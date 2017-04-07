@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour {
 
     public float speed;//the speed pacman can travel
 
+    private Vector2 direction;//the direction pacman is going
+
     Rigidbody2D rb2d;
 
 	// Use this for initialization
@@ -17,23 +19,29 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
         if (Input.GetAxis("Horizontal") < 0)
         {
-            rb2d.velocity = Vector2.left * speed;
-            transform.up = Vector2.left;
+            direction = Vector2.left;
         }
         if (Input.GetAxis("Horizontal") > 0)
         {
-            rb2d.velocity = Vector2.right * speed;
-            transform.up = Vector2.right;
+            direction = Vector2.right;
         }
         if (Input.GetAxis("Vertical") < 0)
         {
-            rb2d.velocity = Vector2.down * speed;
-            transform.up = Vector2.down;
+            direction = Vector2.down;
         }
         if (Input.GetAxis("Vertical") > 0)
         {
-            rb2d.velocity = Vector2.up * speed;
-            transform.up = Vector2.up;
+            direction = Vector2.up;
+        }
+        rb2d.velocity = direction * speed;
+        transform.up = direction;
+        if (rb2d.velocity.x == 0)
+        {
+            transform.position = new Vector2(Mathf.Round(transform.position.x), transform.position.y);
+        }
+        if (rb2d.velocity.y == 0)
+        {
+            transform.position = new Vector2(transform.position.x, Mathf.Round(transform.position.y));
         }
     }
 }
