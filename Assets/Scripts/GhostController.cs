@@ -117,4 +117,12 @@ public class GhostController : MonoBehaviour {
             direction = -direction;
         }
     }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.tag == "Player")
+        {
+            coll.gameObject.transform.position = Vector2.zero;
+        }
+    }
 }
