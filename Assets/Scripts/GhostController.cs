@@ -23,15 +23,23 @@ public class GhostController : MonoBehaviour {
         //Wall Bump Detection
         if (!openDirection(direction))
         {
-            changeDirection();
+            if (canChangeDirection())
+            {
+                changeDirection();
+            }else if (rb2d.velocity.magnitude < speed)
+            {
+                changeDirectionAtRandom();
+            }
         }
         //Come Across an Intersection
         else if (canChangeDirection() && Time.time > changeDirectionTime)
         {
-            if (Random.Range(0, 2) == 0)
-            {
-                changeDirection();
-            }
+            changeDirectionAtRandom();
+        }
+        //Stuck on a non-wall
+        else if (rb2d.velocity.magnitude < speed)
+        {
+            changeDirectionAtRandom();
         }
         //Rotate Eyes
         foreach (Transform t in GetComponentsInChildren<Transform>())
@@ -76,6 +84,15 @@ public class GhostController : MonoBehaviour {
         return openRight || openLeft;
     }
 
+    private void changeDirectionAtRandom()
+    {
+        changeDirectionTime = Time.time + 1;
+        if (Random.Range(0, 2) == 0)
+        {
+            changeDirection();
+        }
+    }
+
     private void changeDirection()
     {
         changeDirectionTime = Time.time + 1;
@@ -97,7 +114,7 @@ public class GhostController : MonoBehaviour {
         }
         else
         {
-            //direction = -direction;
+            direction = -direction;
         }
     }
 }
