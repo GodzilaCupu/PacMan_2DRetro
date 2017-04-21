@@ -7,6 +7,8 @@ public class GhostController : MonoBehaviour {
     public float speed = 1.0f;//the speed this ghost can travel
     public Vector2 direction = Vector2.up;//the direction this ghost is going
 
+    private float changeDirectionTime;//the soonest that he can change direction
+
     private Rigidbody2D rb2d;
     private CircleCollider2D cc2d;
 
@@ -24,9 +26,12 @@ public class GhostController : MonoBehaviour {
             changeDirection();
         }
         //Come Across an Intersection
-        else if (canChangeDirection())
+        else if (canChangeDirection() && Time.time > changeDirectionTime)
         {
-            changeDirection();
+            if (Random.Range(0, 2) == 0)
+            {
+                changeDirection();
+            }
         }
         //Rotate Eyes
         foreach (Transform t in GetComponentsInChildren<Transform>())
@@ -73,6 +78,7 @@ public class GhostController : MonoBehaviour {
 
     private void changeDirection()
     {
+        changeDirectionTime = Time.time + 1;
         Vector2 perpRight = Utility.PerpendicularRight(direction);
         bool openRight = openDirection(perpRight);
         Vector2 perpLeft = Utility.PerpendicularLeft(direction);
