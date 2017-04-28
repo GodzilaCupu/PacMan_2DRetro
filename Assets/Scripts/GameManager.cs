@@ -40,6 +40,21 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		switch (gameState)
         {
+            case GameState.PLAY:
+                bool foundPill = false;
+                foreach (GameObject pill in pills)
+                {
+                    if (pill.activeSelf)
+                    {
+                        foundPill = true;
+                        break;
+                    }
+                }
+                if (!foundPill)
+                {
+                    gameState = GameState.GAME_WON;
+                }
+                break;
             case GameState.PACMAN_DYING:
                 if (Time.time > respawnTime)
                 {
@@ -73,6 +88,17 @@ public class GameManager : MonoBehaviour {
             case GameState.GAME_OVER:
                 gameOverScreen.enabled = true;
                 gameWonScreen.enabled = false;
+                if (Input.anyKeyDown)
+                {
+                    resetGame();
+                    gameState = GameState.PLAY;
+                    gameOverScreen.enabled = false;
+                    gameWonScreen.enabled = false;
+                }
+                break;
+            case GameState.GAME_WON:
+                gameOverScreen.enabled = false;
+                gameWonScreen.enabled = true;
                 if (Input.anyKeyDown)
                 {
                     resetGame();
