@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
     public GameObject pacman;
     public AnimationClip pacmanDeathAnimation;
     public List<GameObject> ghosts;
+    public List<GameObject> pills;
 
     private static GameManager instance;
     private float respawnTime;
@@ -72,6 +73,13 @@ public class GameManager : MonoBehaviour {
             case GameState.GAME_OVER:
                 gameOverScreen.enabled = true;
                 gameWonScreen.enabled = false;
+                if (Input.anyKeyDown)
+                {
+                    resetGame();
+                    gameState = GameState.PLAY;
+                    gameOverScreen.enabled = false;
+                    gameWonScreen.enabled = false;
+                }
                 break;
         }
 	}
@@ -84,6 +92,22 @@ public class GameManager : MonoBehaviour {
         foreach (GameObject ghost in instance.ghosts)
         {
             ghost.GetComponent<GhostController>().freeze(true);
+        }
+    }
+
+    public void resetGame()
+    {
+        pacman.transform.position = Vector2.zero;
+        PlayerController playerController = pacman.GetComponent<PlayerController>();
+        playerController.setLivesLeft(2);
+        playerController.setAlive(true);
+        foreach (GameObject ghost in ghosts)
+        {
+            ghost.GetComponent<GhostController>().reset();
+        }
+        foreach (GameObject pill in pills)
+        {
+            pill.SetActive(true);
         }
     }
 }
