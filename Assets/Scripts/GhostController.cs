@@ -122,7 +122,7 @@ public class GhostController : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            coll.gameObject.transform.position = Vector2.zero;
+            GameManager.pacmanKilled();
         }
     }
 }

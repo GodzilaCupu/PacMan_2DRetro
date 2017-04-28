@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     public Text scoreText;//the Text UI Component that shows the score
 
     private Vector2 direction;//the direction pacman is going
+    private bool alive = true;
 
     Rigidbody2D rb2d;
     Animator animator;
@@ -56,5 +57,11 @@ public class PlayerController : MonoBehaviour {
     {
         score += pointsToAdd;
         scoreText.text = ""+score;
+    }
+
+    public void setAlive(bool isAlive)
+    {
+        alive = isAlive;
+        animator.SetBool("alive", alive);
     }
 }
