@@ -11,8 +11,11 @@ public class GameManager : MonoBehaviour {
     public GameState gameState = GameState.PLAY;
 
     public GameObject pacman;
+    public AnimationClip pacmanDeathAnimation;
+    public List<GameObject> ghosts;
 
     private static GameManager instance;
+    private float respawnTime;
 
 	// Use this for initialization
 	void Start () {
@@ -28,12 +31,40 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		switch (gameState)
+        {
+            case GameState.PACMAN_DYING:
+                if (Time.time > respawnTime)
+                {
+                    gameState = GameState.PACMAN_DEAD;
+                    respawnTime = Time.time + 1;
+                    pacman.SetActive(false);
+                }
+                break;
+            case GameState.PACMAN_DEAD:
+                if (Time.time > respawnTime)
+                {
+                    gameState = GameState.PLAY;
+                    pacman.SetActive(true);
+                    pacman.GetComponent<PlayerController>().setAlive(true);
+                    pacman.transform.position = Vector2.zero;
+                    foreach (GameObject ghost in ghosts)
+                    {
+                        ghost.GetComponent<GhostController>().reset();
+                    }
+                }
+                break;
+        }
 	}
 
     public static void pacmanKilled()
     {
         instance.pacman.GetComponent<PlayerController>().setAlive(false);
         instance.gameState = GameState.PACMAN_DYING;
+        instance.respawnTime = Time.time + instance.pacmanDeathAnimation.length;
+        foreach (GameObject ghost in instance.ghosts)
+        {
+            ghost.GetComponent<GhostController>().freeze(true);
+        }
     }
 }

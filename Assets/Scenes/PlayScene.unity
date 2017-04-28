@@ -10444,6 +10444,11 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!1 &904243573 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1997349024694258, guid: 0a876c03ee8f71e4f9ee3651e2f7881b,
+    type: 2}
+  m_PrefabInternal: {fileID: 688533198}
 --- !u!1 &912878854
 GameObject:
   m_ObjectHideFlags: 0
@@ -11825,6 +11830,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState: 0
   pacman: {fileID: 322759649}
+  pacmanDeathAnimation: {fileID: 7400000, guid: 4b07b934185d7f64cab6b5e257a493ff,
+    type: 2}
+  ghosts:
+  - {fileID: 1773585178}
+  - {fileID: 1936788224}
+  - {fileID: 904243573}
+  - {fileID: 1238835772}
 --- !u!4 &1032944462
 Transform:
   m_ObjectHideFlags: 0
@@ -14216,6 +14228,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4667000522293040, guid: f7a04934c05389f43b27d6c79e714b66,
     type: 2}
   m_PrefabInternal: {fileID: 1237786679}
+--- !u!1 &1238835772 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1997349024694258, guid: 0a876c03ee8f71e4f9ee3651e2f7881b,
+    type: 2}
+  m_PrefabInternal: {fileID: 947166854}
 --- !u!1 &1245637895
 GameObject:
   m_ObjectHideFlags: 0
@@ -20243,6 +20260,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4667000522293040, guid: f7a04934c05389f43b27d6c79e714b66,
     type: 2}
   m_PrefabInternal: {fileID: 1772178292}
+--- !u!1 &1773585178 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1997349024694258, guid: 0a876c03ee8f71e4f9ee3651e2f7881b,
+    type: 2}
+  m_PrefabInternal: {fileID: 496027106}
 --- !u!1001 &1776978795
 Prefab:
   m_ObjectHideFlags: 0
@@ -22101,6 +22123,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4667000522293040, guid: f7a04934c05389f43b27d6c79e714b66,
     type: 2}
   m_PrefabInternal: {fileID: 1933653124}
+--- !u!1 &1936788224 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1997349024694258, guid: 0a876c03ee8f71e4f9ee3651e2f7881b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1838175947}
 --- !u!1 &1946717640
 GameObject:
   m_ObjectHideFlags: 0
