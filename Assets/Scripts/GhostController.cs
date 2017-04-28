@@ -8,6 +8,8 @@ public class GhostController : MonoBehaviour {
     public Vector2 direction = Vector2.up;//the direction this ghost is going
 
     private float changeDirectionTime;//the soonest that he can change direction
+    private Vector2 originalPosition;
+    private bool frozen = false;
 
     private Rigidbody2D rb2d;
     private CircleCollider2D cc2d;
@@ -16,48 +18,53 @@ public class GhostController : MonoBehaviour {
 	void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         cc2d = GetComponent<CircleCollider2D>();
+        originalPosition = transform.position;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //Wall Bump Detection
-        if (!openDirection(direction))
+        if (!frozen)
         {
-            if (canChangeDirection())
+            //Wall Bump Detection
+            if (!openDirection(direction))
             {
-                changeDirection();
-            }else if (rb2d.velocity.magnitude < speed)
+                if (canChangeDirection())
+                {
+                    changeDirection();
+                }
+                else if (rb2d.velocity.magnitude < speed)
+                {
+                    changeDirectionAtRandom();
+                }
+            }
+            //Come Across an Intersection
+            else if (canChangeDirection() && Time.time > changeDirectionTime)
             {
                 changeDirectionAtRandom();
             }
-        }
-        //Come Across an Intersection
-        else if (canChangeDirection() && Time.time > changeDirectionTime)
-        {
-            changeDirectionAtRandom();
-        }
-        //Stuck on a non-wall
-        else if (rb2d.velocity.magnitude < speed)
-        {
-            changeDirectionAtRandom();
-        }
-        //Rotate Eyes
-        foreach (Transform t in GetComponentsInChildren<Transform>())
-        {
-            if (t != transform)
+            //Stuck on a non-wall
+            else if (rb2d.velocity.magnitude < speed)
             {
-                t.up = direction;
+                changeDirectionAtRandom();
             }
-        }
-        //Move
-        rb2d.velocity = direction * speed;
-        if (rb2d.velocity.x == 0)
-        {
-            transform.position = new Vector2(Mathf.Round(transform.position.x), transform.position.y);
-        }
-        if (rb2d.velocity.y == 0)
-        {
-            transform.position = new Vector2(transform.position.x, Mathf.Round(transform.position.y));
+            //Rotate Eyes
+            foreach (Transform t in GetComponentsInChildren<Transform>())
+            {
+                if (t != transform)
+                {
+                    t.up = direction;
+                }
+            }
+            //Move
+            rb2d.velocity = direction * speed;
+            if (rb2d.velocity.x == 0)
+            {
+                transform.position = new Vector2(Mathf.Round(transform.position.x), transform.position.y);
+            }
+            if (rb2d.velocity.y == 0)
+            {
+                transform.position = new Vector2(transform.position.x, Mathf.Round(transform.position.y));
+            }
         }
     }
 
@@ -122,7 +129,19 @@ public class GhostController : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            coll.gameObject.transform.position = Vector2.zero;
+            GameManager.pacmanKilled();
         }
+    }
+
+    public void reset()
+    {
+        transform.position = originalPosition;
+        freeze(false);
+    }
+
+    public void freeze(bool freeze)
+    {
+        frozen = freeze;
+        rb2d.velocity = Vector2.zero;
     }
 }

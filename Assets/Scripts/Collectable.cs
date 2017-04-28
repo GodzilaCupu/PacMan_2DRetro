@@ -21,7 +21,7 @@ public class Collectable : MonoBehaviour {
         if (coll.gameObject.tag == "Player")
         {
             coll.gameObject.GetComponent<PlayerController>().addPoints(points);
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
         }
     }
 }
