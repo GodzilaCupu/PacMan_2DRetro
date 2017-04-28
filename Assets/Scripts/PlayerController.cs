@@ -7,8 +7,11 @@ public class PlayerController : MonoBehaviour {
 
     public float speed;//the speed pacman can travel
     public int score = 0;//the score
+    public int livesLeft = 2;//how many extras lives pacman has left
 
     public Text scoreText;//the Text UI Component that shows the score
+    public Image life1;
+    public Image life2;
 
     private Vector2 direction;//the direction pacman is going
     private bool alive = true;
@@ -67,5 +70,12 @@ public class PlayerController : MonoBehaviour {
         alive = isAlive;
         animator.SetBool("alive", alive);
         rb2d.velocity = Vector2.zero;
+    }
+
+    public void setLivesLeft(int lives)
+    {
+        livesLeft = lives;
+        life1.enabled = livesLeft >= 1;
+        life2.enabled = livesLeft >= 2;
     }
 }
