@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
         PLAY, PACMAN_DYING, PACMAN_DEAD, GAME_OVER, GAME_WON
     };
     public GameState gameState = GameState.PLAY;
+    [Range(1,10)]
     public float ghostVulnerableDuration = 2.0f;//how long the ghosts should be vulnerable for
     
     public Image gameWonScreen;

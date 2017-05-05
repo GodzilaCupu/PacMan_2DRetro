@@ -12366,6 +12366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameState: 0
+  ghostVulnerableDuration: 7
   gameWonScreen: {fileID: 777187994}
   gameOverScreen: {fileID: 566437392}
   pacman: {fileID: 322759649}

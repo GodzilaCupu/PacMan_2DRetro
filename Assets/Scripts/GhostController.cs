@@ -12,6 +12,7 @@ public class GhostController : MonoBehaviour {
     private Color originalColor;
     private bool frozen = false;
     private bool vulnerable = false;
+    private bool eaten = false;
 
     private Rigidbody2D rb2d;
     private CircleCollider2D cc2d;
@@ -30,27 +31,39 @@ public class GhostController : MonoBehaviour {
 	void Update () {
         if (!frozen)
         {
-            //Wall Bump Detection
-            if (!openDirection(direction))
+            if (!eaten)
             {
-                if (canChangeDirection())
+                //Wall Bump Detection
+                if (!openDirection(direction))
                 {
-                    changeDirection();
+                    if (canChangeDirection())
+                    {
+                        changeDirection();
+                    }
+                    else if (rb2d.velocity.magnitude < speed)
+                    {
+                        changeDirectionAtRandom();
+                    }
                 }
+                //Come Across an Intersection
+                else if (canChangeDirection() && Time.time > changeDirectionTime)
+                {
+                    changeDirectionAtRandom();
+                }
+                //Stuck on a non-wall
                 else if (rb2d.velocity.magnitude < speed)
                 {
                     changeDirectionAtRandom();
                 }
             }
-            //Come Across an Intersection
-            else if (canChangeDirection() && Time.time > changeDirectionTime)
+            else
             {
-                changeDirectionAtRandom();
-            }
-            //Stuck on a non-wall
-            else if (rb2d.velocity.magnitude < speed)
-            {
-                changeDirectionAtRandom();
+                //Check to see if it's arrived
+                if (Vector2.Distance(originalPosition, transform.position) < 0.1f)
+                {
+                    transform.position = originalPosition;
+                    setEaten(false);
+                }
             }
             //Rotate Eyes
             foreach (Transform t in GetComponentsInChildren<Transform>())
@@ -134,7 +147,13 @@ public class GhostController : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            GameManager.pacmanKilled();
+            if (vulnerable)
+            {
+                setEaten(true);
+            }
+            else {
+                GameManager.pacmanKilled();
+            }
         }
     }
 
@@ -160,6 +179,23 @@ public class GhostController : MonoBehaviour {
         else
         {
             sr.color = originalColor;
+        }
+    }
+
+    public void setEaten(bool isEaten)
+    {
+        eaten = isEaten;
+        if (eaten)
+        {
+            sr.color = new Color(0, 0, 0, 0);
+            cc2d.enabled = false;
+            direction = originalPosition - (Vector2)transform.position;
+        }
+        else
+        {
+            sr.color = originalColor;
+            cc2d.enabled = true;
+            direction = Vector2.up;
         }
     }
 }
