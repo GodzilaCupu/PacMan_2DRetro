@@ -6,6 +6,7 @@ public class GhostController : MonoBehaviour {
 
     public float speed = 1.0f;//the speed this ghost can travel
     public Vector2 direction = Vector2.up;//the direction this ghost is going
+    public Color vulnerableColor = Color.blue;
 
     private float changeDirectionTime;//the soonest that he can change direction
     private Vector2 originalPosition;
@@ -174,7 +175,7 @@ public class GhostController : MonoBehaviour {
         vulnerable = isVulnerable;
         if (vulnerable)
         {
-            sr.color = Color.blue;
+            sr.color = vulnerableColor;
         }
         else
         {
@@ -196,6 +197,18 @@ public class GhostController : MonoBehaviour {
             sr.color = originalColor;
             cc2d.enabled = true;
             direction = Vector2.up;
+        }
+    }
+
+    public void blink()
+    {
+        if (sr.color == originalColor)
+        {
+            sr.color = vulnerableColor;
+        }
+        else if (sr.color == vulnerableColor)
+        {
+            sr.color = originalColor;
         }
     }
 }

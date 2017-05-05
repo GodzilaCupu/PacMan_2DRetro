@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour {
     };
     public GameState gameState = GameState.PLAY;
     [Range(1,10)]
-    public float ghostVulnerableDuration = 2.0f;//how long the ghosts should be vulnerable for
+    public float ghostVulnerableDuration = 7.0f;//how long the ghosts should be vulnerable for
+    [Range(1,5)]
+    public float ghostVulnerableEndWarningDuration = 2.0f;
     
     public Image gameWonScreen;
     public Image gameOverScreen;
@@ -116,9 +118,18 @@ public class GameManager : MonoBehaviour {
         {
             if (Time.time > invulnerableTime)
             {
+                invulnerableTime = 0;
                 foreach (GameObject ghost in ghosts)
                 {
                     ghost.GetComponent<GhostController>().setVulnerable(false);
+                }
+            }
+            else if (Time.time > invulnerableTime - ghostVulnerableEndWarningDuration
+                && (Time.time *10)%2 < 0.1f)
+            {
+                foreach (GameObject ghost in ghosts)
+                {
+                    ghost.GetComponent<GhostController>().blink();
                 }
             }
         }
