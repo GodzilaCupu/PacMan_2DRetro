@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour {
         PLAY, PACMAN_DYING, PACMAN_DEAD, GAME_OVER, GAME_WON
     };
     public GameState gameState = GameState.PLAY;
-
+    public float ghostVulnerableDuration = 2.0f;//how long the ghosts should be vulnerable for
+    
     public Image gameWonScreen;
     public Image gameOverScreen;
 
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour {
 
     private static GameManager instance;
     private float respawnTime;
+    private float invulnerableTime = 0;//when the ghosts will become invulnerable again
 
 	// Use this for initialization
 	void Start () {
@@ -108,6 +110,17 @@ public class GameManager : MonoBehaviour {
                 }
                 break;
         }
+        //Ghost Vulnerability
+        if (invulnerableTime > 0)
+        {
+            if (Time.time > invulnerableTime)
+            {
+                foreach (GameObject ghost in ghosts)
+                {
+                    ghost.GetComponent<GhostController>().setVulnerable(false);
+                }
+            }
+        }
 	}
 
     public static void pacmanKilled()
@@ -139,6 +152,7 @@ public class GameManager : MonoBehaviour {
 
     public static void makeGhostsVulnerable()
     {
+        instance.invulnerableTime = Time.time + instance.ghostVulnerableDuration;
         foreach (GameObject ghost in instance.ghosts)
         {
             ghost.GetComponent<GhostController>().setVulnerable(true);

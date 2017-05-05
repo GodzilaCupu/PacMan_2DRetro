@@ -9,17 +9,21 @@ public class GhostController : MonoBehaviour {
 
     private float changeDirectionTime;//the soonest that he can change direction
     private Vector2 originalPosition;
+    private Color originalColor;
     private bool frozen = false;
     private bool vulnerable = false;
 
     private Rigidbody2D rb2d;
     private CircleCollider2D cc2d;
+    private SpriteRenderer sr;
 
 	// Use this for initialization
 	void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         cc2d = GetComponent<CircleCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
         originalPosition = transform.position;
+        originalColor = sr.color;
     }
 	
 	// Update is called once per frame
@@ -149,6 +153,13 @@ public class GhostController : MonoBehaviour {
     public void setVulnerable(bool isVulnerable)
     {
         vulnerable = isVulnerable;
-        GetComponent<SpriteRenderer>().color = Color.blue;
+        if (vulnerable)
+        {
+            sr.color = Color.blue;
+        }
+        else
+        {
+            sr.color = originalColor;
+        }
     }
 }
