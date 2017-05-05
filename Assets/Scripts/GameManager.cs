@@ -136,4 +136,12 @@ public class GameManager : MonoBehaviour {
             pill.SetActive(true);
         }
     }
+
+    public static void makeGhostsVulnerable()
+    {
+        foreach (GameObject ghost in instance.ghosts)
+        {
+            ghost.GetComponent<GhostController>().setVulnerable(true);
+        }
+    }
 }

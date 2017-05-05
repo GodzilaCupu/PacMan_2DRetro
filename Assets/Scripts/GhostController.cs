@@ -10,6 +10,7 @@ public class GhostController : MonoBehaviour {
     private float changeDirectionTime;//the soonest that he can change direction
     private Vector2 originalPosition;
     private bool frozen = false;
+    private bool vulnerable = false;
 
     private Rigidbody2D rb2d;
     private CircleCollider2D cc2d;
@@ -143,5 +144,11 @@ public class GhostController : MonoBehaviour {
     {
         frozen = freeze;
         rb2d.velocity = Vector2.zero;
+    }
+
+    public void setVulnerable(bool isVulnerable)
+    {
+        vulnerable = isVulnerable;
+        GetComponent<SpriteRenderer>().color = Color.blue;
     }
 }
