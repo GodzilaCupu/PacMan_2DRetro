@@ -7,6 +7,7 @@ public class GhostController : MonoBehaviour {
     public float speed = 1.0f;//the speed this ghost can travel
     public Vector2 direction = Vector2.up;//the direction this ghost is going
     public Color vulnerableColor = Color.blue;
+    public int points = 400;//how many points you get for eating this ghost
 
     private float changeDirectionTime;//the soonest that he can change direction
     private Vector2 originalPosition;
@@ -150,6 +151,7 @@ public class GhostController : MonoBehaviour {
         {
             if (vulnerable)
             {
+                coll.gameObject.GetComponent<PlayerController>().addPoints(points);
                 setEaten(true);
             }
             else {
