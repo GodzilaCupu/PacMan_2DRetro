@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   points: 200
+  collectSound: {fileID: 8300000, guid: c06a46d8496815e42bb2c6fb227129f5, type: 3}
 --- !u!212 &212065259950699642
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -19,12 +19,14 @@ public class GhostController : MonoBehaviour {
     private Rigidbody2D rb2d;
     private CircleCollider2D cc2d;
     private SpriteRenderer sr;
+    private AudioSource ghostEatenSound;
 
 	// Use this for initialization
 	void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         cc2d = GetComponent<CircleCollider2D>();
         sr = GetComponent<SpriteRenderer>();
+        ghostEatenSound = GetComponent<AudioSource>();
         originalPosition = transform.position;
         originalColor = sr.color;
     }
@@ -193,6 +195,7 @@ public class GhostController : MonoBehaviour {
             sr.color = new Color(0, 0, 0, 0);
             cc2d.enabled = false;
             direction = originalPosition - (Vector2)transform.position;
+            ghostEatenSound.Play();
         }
         else
         {

@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour {
     public List<GameObject> ghosts;
     public List<GameObject> pills;
 
+    public AudioSource pacmanKilledSound;
+    public AudioSource gameWonSound;
+    public AudioSource gameOverSound;
+
     private static GameManager instance;
     private float respawnTime;
     private float invulnerableTime = 0;//when the ghosts will become invulnerable again
@@ -93,6 +97,10 @@ public class GameManager : MonoBehaviour {
             case GameState.GAME_OVER:
                 gameOverScreen.enabled = true;
                 gameWonScreen.enabled = false;
+                if (!gameOverSound.isPlaying)
+                {
+                    gameOverSound.Play();
+                }
                 if (Input.anyKeyDown)
                 {
                     resetGame();
@@ -104,6 +112,10 @@ public class GameManager : MonoBehaviour {
             case GameState.GAME_WON:
                 gameOverScreen.enabled = false;
                 gameWonScreen.enabled = true;
+                if (!gameWonSound.isPlaying)
+                {
+                    gameWonSound.Play();
+                }
                 if (Input.anyKeyDown)
                 {
                     resetGame();
@@ -140,6 +152,7 @@ public class GameManager : MonoBehaviour {
         instance.pacman.GetComponent<PlayerController>().setAlive(false);
         instance.gameState = GameState.PACMAN_DYING;
         instance.respawnTime = Time.time + instance.pacmanDeathAnimation.length;
+        instance.pacmanKilledSound.Play();
         foreach (GameObject ghost in instance.ghosts)
         {
             ghost.GetComponent<GhostController>().freeze(true);
