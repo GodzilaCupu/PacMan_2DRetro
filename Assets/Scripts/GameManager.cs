@@ -145,6 +145,10 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
 	}
 
     public static void pacmanKilled()
