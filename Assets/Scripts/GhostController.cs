@@ -6,46 +6,66 @@ public class GhostController : MonoBehaviour {
 
     public float speed = 1.0f;//the speed this ghost can travel
     public Vector2 direction = Vector2.up;//the direction this ghost is going
+    public Color vulnerableColor = Color.blue;
+    public int points = 400;//how many points you get for eating this ghost
 
     private float changeDirectionTime;//the soonest that he can change direction
     private Vector2 originalPosition;
+    private Color originalColor;
     private bool frozen = false;
+    private bool vulnerable = false;
+    private bool eaten = false;
 
     private Rigidbody2D rb2d;
     private CircleCollider2D cc2d;
+    private SpriteRenderer sr;
 
 	// Use this for initialization
 	void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         cc2d = GetComponent<CircleCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
         originalPosition = transform.position;
+        originalColor = sr.color;
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (!frozen)
         {
-            //Wall Bump Detection
-            if (!openDirection(direction))
+            if (!eaten)
             {
-                if (canChangeDirection())
+                //Wall Bump Detection
+                if (!openDirection(direction))
                 {
-                    changeDirection();
+                    if (canChangeDirection())
+                    {
+                        changeDirection();
+                    }
+                    else if (rb2d.velocity.magnitude < speed)
+                    {
+                        changeDirectionAtRandom();
+                    }
                 }
+                //Come Across an Intersection
+                else if (canChangeDirection() && Time.time > changeDirectionTime)
+                {
+                    changeDirectionAtRandom();
+                }
+                //Stuck on a non-wall
                 else if (rb2d.velocity.magnitude < speed)
                 {
                     changeDirectionAtRandom();
                 }
             }
-            //Come Across an Intersection
-            else if (canChangeDirection() && Time.time > changeDirectionTime)
+            else
             {
-                changeDirectionAtRandom();
-            }
-            //Stuck on a non-wall
-            else if (rb2d.velocity.magnitude < speed)
-            {
-                changeDirectionAtRandom();
+                //Check to see if it's arrived
+                if (Vector2.Distance(originalPosition, transform.position) < 0.1f)
+                {
+                    transform.position = originalPosition;
+                    setEaten(false);
+                }
             }
             //Rotate Eyes
             foreach (Transform t in GetComponentsInChildren<Transform>())
@@ -129,7 +149,14 @@ public class GhostController : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            GameManager.pacmanKilled();
+            if (vulnerable)
+            {
+                coll.gameObject.GetComponent<PlayerController>().addPoints(points);
+                setEaten(true);
+            }
+            else {
+                GameManager.pacmanKilled();
+            }
         }
     }
 
@@ -143,5 +170,47 @@ public class GhostController : MonoBehaviour {
     {
         frozen = freeze;
         rb2d.velocity = Vector2.zero;
+    }
+
+    public void setVulnerable(bool isVulnerable)
+    {
+        vulnerable = isVulnerable;
+        if (vulnerable)
+        {
+            sr.color = vulnerableColor;
+        }
+        else
+        {
+            sr.color = originalColor;
+        }
+    }
+
+    public void setEaten(bool isEaten)
+    {
+        eaten = isEaten;
+        if (eaten)
+        {
+            sr.color = new Color(0, 0, 0, 0);
+            cc2d.enabled = false;
+            direction = originalPosition - (Vector2)transform.position;
+        }
+        else
+        {
+            sr.color = originalColor;
+            cc2d.enabled = true;
+            direction = Vector2.up;
+        }
+    }
+
+    public void blink()
+    {
+        if (sr.color == originalColor)
+        {
+            sr.color = vulnerableColor;
+        }
+        else if (sr.color == vulnerableColor)
+        {
+            sr.color = originalColor;
+        }
     }
 }

@@ -20,8 +20,13 @@ public class Collectable : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            coll.gameObject.GetComponent<PlayerController>().addPoints(points);
-            gameObject.SetActive(false);
+            collected(coll);
         }
+    }
+
+    protected virtual void collected(Collider2D coll)
+    {
+        coll.gameObject.GetComponent<PlayerController>().addPoints(points);
+        gameObject.SetActive(false);
     }
 }
